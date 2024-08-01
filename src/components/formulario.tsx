@@ -2,14 +2,17 @@ import { Dispatch, FormEvent, SetStateAction} from "react"
 import { useForm } from "../hooks/useForm"
 import { InputForm } from "./input-form"
 
-export interface FormValues {
+export interface Paciente {
+  id: string;
   mascota: string;
   duenio: string;
   email: string;
   raza: string;
 }
 
-export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAction<FormValues[]>>}) => {
+type FormValues = Omit<Paciente, 'id'>
+
+export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAction<Paciente[]>>}) => {
 
   const {FormValues, handleChange} = useForm<FormValues>({
     mascota:"",
@@ -20,9 +23,15 @@ export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAct
  
   const handleSubmit = (e : FormEvent) => {
     e.preventDefault();
-    setPacientes((prev:FormValues[]) => {
-      return [...prev, FormValues]
-    })
+
+    const newPaciente = {
+      id: crypto.randomUUID(),
+      ...FormValues
+    }
+  
+   setPacientes((prev:Paciente[]) => {
+    return [...prev, newPaciente]
+   })
   }
 
 

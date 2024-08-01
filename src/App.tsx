@@ -1,11 +1,11 @@
 import { useState } from "react"
-import { Formulario, FormValues } from "./components/formulario"
+import { Formulario, Paciente } from "./components/formulario"
 import { Header } from "./components/header"
 import { ListadoPacientes } from "./components/listado-pacientes"
 
 function App() {
 
-  const [pacientes, setPacientes] = useState<FormValues[]>([])
+  const [pacientes, setPacientes] = useState<Paciente[]>([])
 
   return (
     <div className="container mx-auto mt-10">
