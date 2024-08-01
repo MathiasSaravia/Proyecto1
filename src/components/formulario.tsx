@@ -14,7 +14,7 @@ type FormValues = Omit<Paciente, 'id'>
 
 export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAction<Paciente[]>>}) => {
 
-  const {FormValues, handleChange} = useForm<FormValues>({
+  const {FormValues, handleChange , reset} = useForm<FormValues>({
     mascota:"",
     duenio:"",
     email:"",
@@ -32,6 +32,9 @@ export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAct
    setPacientes((prev:Paciente[]) => {
     return [...prev, newPaciente]
    })
+
+   reset()
+
   }
 
 
@@ -46,6 +49,7 @@ export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAct
        label="Mascota"
        placeholder="Nombre de la mascota"
        onChange={handleChange}
+       value={FormValues.mascota}
       />
       <InputForm 
        name="raza"
@@ -53,6 +57,7 @@ export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAct
        label="Raza"
        placeholder="Raza de la mascota"
        onChange={handleChange}
+       value={FormValues.raza}
       />
       <InputForm 
        name="duenio"
@@ -60,6 +65,7 @@ export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAct
        label="Dueño"
        placeholder="Nombre y apellido del dueño"
        onChange={handleChange}
+       value={FormValues.duenio}
       />
       <InputForm 
        name="email"
@@ -67,6 +73,7 @@ export const Formulario = ({setPacientes} : {setPacientes : Dispatch<SetStateAct
        label="Email"
        placeholder="Email de contacto"
        onChange={handleChange}
+       value={FormValues.email}
       />
 
       <button className="text-white bg-indigo-700 font-bold uppercase p-3 transition-all w-full hover:bg-indigo-800" type="submit">Agregar pacientes</button>

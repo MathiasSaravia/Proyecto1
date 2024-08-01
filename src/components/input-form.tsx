@@ -10,9 +10,10 @@ export interface InputFormProps {
     placeholder?: string;
     className?: string;
     onChange : (e : ChangeEvent<HTMLInputElement>) => void;
+    value? : string;
 }
 
-export const InputForm = ({ label, type, placeholder, className, name, error, onChange }: InputFormProps) => {
+export const InputForm = ({ label, type, placeholder, className, name, error, onChange, value }: InputFormProps) => {
     return (
         <div className={`mb-5 ${className}`}>
             <label htmlFor={name} className="block text-gray-700 uppercase font-bold">{label}</label>
@@ -23,6 +24,7 @@ export const InputForm = ({ label, type, placeholder, className, name, error, on
                 placeholder={placeholder}
                 className={`border placeholder-gray-400 mt-2 p-2 w-full ${error ? "border-red-700" : "border-gray"}`}
                 onChange={onChange}
+                value={value}
             />
             <p className="text-sm text-red-700 ms-2">{error}</p>
         </div>
