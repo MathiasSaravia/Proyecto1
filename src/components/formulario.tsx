@@ -1,7 +1,8 @@
-import { FormEvent, useContext } from "react"
+import { FormEvent, useContext, useState } from "react"
 import { useForm } from "../hooks/useForm"
 import { InputForm } from "./input-form"
 import { Paciente, PacientesContext } from "../context/PacientesContext"
+import { schemaFormAddPaciente } from "../validations/schemas-form-add-paciente"
 
 //{setPacientes} : {setPacientes : Dispatch<SetStateAction<Paciente[]>>}
 type FormValues = Omit<Paciente, 'id'>
@@ -9,6 +10,8 @@ type FormValues = Omit<Paciente, 'id'>
 export const Formulario = () => {
 
   const { agregarPaciente } = useContext(PacientesContext)
+
+  const [errors, seterrors] = useState<FormValues>({} as FormValues)
 
   const { FormValues, handleChange, reset } = useForm<FormValues>({
     mascota: "",
@@ -20,12 +23,30 @@ export const Formulario = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
+    const result = schemaFormAddPaciente.validate(FormValues, { abortEarly: false });
+
+    if(result.error){
+
+      seterrors(result.error.details.reduce((acc, err) => {
+        const inputName = err.context?.key as string;
+        const message = err.message;
+        return{
+          ...acc,
+          [inputName]:message,
+        };
+      },{} as FormValues))
+
+      return
+
+    }
+
     const newPaciente = {
       id: crypto.randomUUID(),
       ...FormValues
     }
 
     agregarPaciente(newPaciente)
+    seterrors({} as FormValues)
 
     reset()
 
@@ -44,6 +65,7 @@ export const Formulario = () => {
           placeholder="Nombre de la mascota"
           onChange={handleChange}
           value={FormValues.mascota}
+          error={errors.mascota}
         />
         <InputForm
           name="raza"
@@ -52,6 +74,7 @@ export const Formulario = () => {
           placeholder="Raza de la mascota"
           onChange={handleChange}
           value={FormValues.raza}
+          error={errors.raza}
         />
         <InputForm
           name="duenio"
@@ -60,6 +83,7 @@ export const Formulario = () => {
           placeholder="Nombre y apellido del dueño"
           onChange={handleChange}
           value={FormValues.duenio}
+          error={errors.duenio}
         />
         <InputForm
           name="email"
@@ -68,6 +92,7 @@ export const Formulario = () => {
           placeholder="Email de contacto"
           onChange={handleChange}
           value={FormValues.email}
+          error={errors.email}
         />
 
         <button className="text-white bg-indigo-700 font-bold uppercase p-3 transition-all w-full hover:bg-indigo-800" type="submit">Agregar pacientes</button>
